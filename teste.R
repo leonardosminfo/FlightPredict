@@ -276,43 +276,14 @@ test_lasso_low <- test_data_low[,sc]
 
 bestConfig_mlp_train_lasso <- bestConfiguration(train_lasso_low, "alvo")
 
+
 # geração do modelo
 mlp_net_train_lasso <- class_mlp_nnet(train_lasso_low, test_lasso_low, "alvo", 
                                       decay=bestConfig_mlp_train_lasso[2], 
                                       neurons=bestConfig_mlp_train_lasso[3])
 
-mlp_net_train_lasso <- class_mlp_nnet(train_lasso_low, test_lasso_low, "alvo", decay=0.01, neurons=9)
+mlp_net_train_lasso <- class_mlp_nnet(train_lasso_low,test_lasso_low, "alvo", decay=0.01, neurons=9)
 #AVALIACAO DO MODELO
 accuracy(mlp_net_train_lasso)
 sensitivity(mlp_net_train_lasso)
             
-###########################################################
-n <-ncol(train_lasso)
-output <- train_lasso$alvo
-input <-train_lasso[ ,-n]
-data <-ubUnder(X=input, Y= output, perc = 50, method = "percPos") # ratio 50/50
-newData<-cbind(data$X, data$Y)
-
-newData$alvo <- newData$`data$Y`
-newData$`data$Y` <- NULL
-
-train_lasso_undersampling <- newData
-
-
-train_lasso$alvo <- as.factor(train_lasso$alvo)
-train_lasso_smote <- SMOTE(alvo ~ ., train_lasso, perc.over = 100, perc.under=200) # ratio 50/50
-
-bestConfig_mlp_train_lasso <- bestConfiguration(train_lasso, "alvo")
-
-
-# geração do modelo
-mlp_net_train_lasso <- class_mlp_nnet(train_lasso, test_lasso, "alvo", decay=bestConfig_mlp_train_lasso[2], neurons=bestConfig_mlp_train_lasso[3])
-
-mlp_net_train_lasso <- class_mlp_nnet(train_lasso, test_lasso, "alvo", decay=0.01, neurons=9)
-
-
-accuracy(mlp_net_train_lasso)
-sensitivity(mlp_net_train_lasso)
-
-croc(mlp_net_train_lasso, test_lasso,"alvo")
-  
